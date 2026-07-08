@@ -1,0 +1,70 @@
+name: android_reverse
+version: 0.1.0
+description: Evidence-driven Android reverse workflow for CTF and authorized APK analysis.
+
+stages:
+  - id: intake
+    title: Sample intake
+    actions:
+      - hash_apk
+      - create_case_workspace
+      - detect_apk_metadata
+
+  - id: static_unpack
+    title: Static unpack
+    actions:
+      - run_apktool
+      - run_jadx
+      - extract_native_libraries
+      - extract_strings
+
+  - id: protocol_analysis
+    title: Protocol analysis
+    indicators:
+      - OkHttpClient
+      - Retrofit
+      - HttpURLConnection
+      - WebSocket
+      - Socket
+      - grpc
+      - JSONObject
+      - protobuf
+    key_fields:
+      - sign
+      - token
+      - timestamp
+      - nonce
+      - deviceId
+      - fingerprint
+      - uid
+      - session
+
+  - id: field_location
+    title: Key field location
+    strategy:
+      - locate_payload_builder
+      - trace_value_provider
+      - inspect_crypto_call
+      - inspect_native_dependency
+      - verify_with_dynamic_trace
+
+  - id: native_jni
+    title: Native JNI analysis
+    indicators:
+      - System.loadLibrary
+      - native
+      - JNI_OnLoad
+      - RegisterNatives
+      - Java_
+      - GetStringUTFChars
+      - NewStringUTF
+
+  - id: vmp
+    title: VMP analysis
+    indicators:
+      - dispatcher_loop
+      - handler_table
+      - opcode_fetch
+      - vm_context
+      - indirect_branch
+      - flattened_control_flow
