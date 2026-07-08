@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+cases/
+samples/
+*.apk
+*.apks
+*.xapk
+*.apkm
+*.so
+*.dex
+dist/
+build/
+*.egg-info/
+network_events.jsonl
